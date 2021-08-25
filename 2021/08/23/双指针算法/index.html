@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="均衡，存乎万物之间">
+  <meta name="description" content="双指针算法，可以优化一些朴素算法，减少遍历的次数 ，降低算法的时间复杂度。 一般模板123456for (int i &#x3D; 0, j &#x3D; 0; i &lt; n; i ++ )&amp;#123;    while (j &lt; i &amp;&amp; check(i, j)) j ++ ; &#x2F;&#x2F;指针的移动    &#x2F;&#x2F; 具体问题的逻辑&amp;#125;  常见问题分类：​    (1) 对于一个序列，用两个指">
 <meta property="og:type" content="article">
 <meta property="og:title" content="双指针算法">
 <meta property="og:url" content="http://example.com/2021/08/23/%E5%8F%8C%E6%8C%87%E9%92%88%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="SnowDawn&#39;Home">
-<meta property="og:description" content="均衡，存乎万物之间">
+<meta property="og:description" content="双指针算法，可以优化一些朴素算法，减少遍历的次数 ，降低算法的时间复杂度。 一般模板123456for (int i &#x3D; 0, j &#x3D; 0; i &lt; n; i ++ )&amp;#123;    while (j &lt; i &amp;&amp; check(i, j)) j ++ ; &#x2F;&#x2F;指针的移动    &#x2F;&#x2F; 具体问题的逻辑&amp;#125;  常见问题分类：​    (1) 对于一个序列，用两个指">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-08-23T01:40:56.000Z">
-<meta property="article:modified_time" content="2021-08-23T03:30:48.103Z">
+<meta property="article:modified_time" content="2021-08-25T04:37:39.214Z">
 <meta property="article:author" content="Snow933">
 <meta name="twitter:card" content="summary">
 
@@ -207,10 +207,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-08-23 09:40:56 / 修改时间：11:30:48" itemprop="dateCreated datePublished" datetime="2021-08-23T09:40:56+08:00">2021-08-23</time>
+              <time title="创建时间：2021-08-23 09:40:56" itemprop="dateCreated datePublished" datetime="2021-08-23T09:40:56+08:00">2021-08-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-25 12:37:39" itemprop="dateModified" datetime="2021-08-25T12:37:39+08:00">2021-08-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -232,7 +238,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>双指针算法，可以优化一些朴素算法，减少遍历的次数 ，降低算法的时间复杂度。</p>
+<h2 id="一般模板"><a href="#一般模板" class="headerlink" title="一般模板"></a>一般模板</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; n; i ++ )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">while</span> (j &lt; i &amp;&amp; <span class="built_in">check</span>(i, j)) j ++ ; <span class="comment">//指针的移动</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 具体问题的逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="常见问题分类："><a href="#常见问题分类：" class="headerlink" title="常见问题分类："></a>常见问题分类：</h3><p>​    (1) 对于一个序列，用两个指针维护一段区间<br>​    (2) 对于两个序列，维护某种次序，比如归并排序中合并两个有序序列的操作</p>
+<hr>
+<h3 id="例题：-最长连续不重复子序列"><a href="#例题：-最长连续不重复子序列" class="headerlink" title="例题： 最长连续不重复子序列 "></a>例题：<a target="_blank" rel="noopener" href="https://www.acwing.com/problem/content/801/"> 最长连续不重复子序列 </a></h3><p>给定一个长度为 n 的整数序列，请找出最长的不包含重复的数的连续区间，输出它的长度。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">100010</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">int</span> a[N], s[N];						     <span class="comment">//s[N]，存储当前序列中各个数字的数量</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        cin &gt;&gt; a[i];</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; n; i++)	<span class="comment">//双指针， i指针先往前</span></span><br><span class="line">    &#123;</span><br><span class="line">        s[a[i]]++;						<span class="comment">//将这个数加入当前i ，j 之间</span></span><br><span class="line">        <span class="keyword">while</span> (s[a[i]] &gt; <span class="number">1</span>)				<span class="comment">//如果数量大于1 ， 那么就是有重复的</span></span><br><span class="line">        &#123;</span><br><span class="line">            s[a[j]]--;					<span class="comment">//将重复的T出去</span></span><br><span class="line">            j++;						<span class="comment">//指针右移，直到与i指针重合了，继续开始下一个序列</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        res = <span class="built_in">max</span>(res, i - j + <span class="number">1</span>);		<span class="comment">//记录当前的最大值</span></span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; res &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
     </div>
 
     
@@ -309,6 +329,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.</span> <span class="nav-text">一般模板</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%88%86%E7%B1%BB%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">常见问题分类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98%EF%BC%9A-%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E4%B8%8D%E9%87%8D%E5%A4%8D%E5%AD%90%E5%BA%8F%E5%88%97"><span class="nav-number">1.2.</span> <span class="nav-text">例题： 最长连续不重复子序列 </span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
