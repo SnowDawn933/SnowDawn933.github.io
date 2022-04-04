@@ -182,6 +182,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/04/%E6%B5%8B%E9%87%8F%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2%E6%88%90%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow933">
+      <meta itemprop="description" content="均衡，存乎万物之间">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SnowDawn'Home">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/04/%E6%B5%8B%E9%87%8F%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2%E6%88%90%E6%9C%AC/" class="post-title-link" itemprop="url">测量系统调用成本</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-04-04 09:58:22 / 修改时间：11:22:18" itemprop="dateCreated datePublished" datetime="2022-04-04T09:58:22+08:00">2022-04-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9FLAB/" itemprop="url" rel="index"><span itemprop="name">操作系统LAB</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="测量成本的工具"><a href="#测量成本的工具" class="headerlink" title="测量成本的工具"></a>测量成本的工具</h1><p>使用 <code>gettimeofday()</code>  这个典型时钟函数来测量时间成本，返回自1970-01-01 00:00:00到现在所经历的秒数，调用两次该函数通过相减的方式获取时间差。</p>
+<p>根据函数的定义：此函数在<code>sys/time.h&gt;</code>中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">gettimeofday</span><span class="params">(struct timeval *, struct timezone *)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>定义了两个结构体，分别记录时间和时区</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> &#123;</span>undefined</span><br><span class="line"> <span class="keyword">time_t</span> tv_sec;</span><br><span class="line"> <span class="keyword">suseconds_t</span> tv_usec;</span><br><span class="line">&#125;;<span class="comment">//存储秒和微秒</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timezone</span> &#123;</span>undefined</span><br><span class="line"> <span class="keyword">int</span> tz_minuteswest;</span><br><span class="line"> <span class="keyword">int</span> tz_dsttime;</span><br><span class="line">&#125;;<span class="comment">//记录时区</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="使用举例-测试其时间精度是否可以达到定义中声明的微秒级别"><a href="#使用举例-测试其时间精度是否可以达到定义中声明的微秒级别" class="headerlink" title="使用举例 : 测试其时间精度是否可以达到定义中声明的微秒级别"></a>使用举例 : 测试其时间精度是否可以达到定义中声明的微秒级别</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">start</span>,<span class="title">end</span>;</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">10</span>;  </span><br><span class="line">    gettimeofday(&amp;start, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10</span>;++i) &#123;	</span><br><span class="line">		gettimeofday(&amp;start, <span class="literal">NULL</span>);</span><br><span class="line">		gettimeofday(&amp;end, <span class="literal">NULL</span>);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%ld\n&quot;</span>, end.tv_usec - start.tv_usec);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%ld %ld\n&quot;</span>, end.tv_usec, start.tv_usec);</span><br><span class="line">	&#125;</span><br><span class="line">    gettimeofday(&amp;end, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是在空系统调用测试中连续调用 <code>gettimeofday()</code>函数，如果精确度可以达到微秒 级别，那么两次连续调用获取的时间相减应该近似于0</p>
+<h5 id="执行结果如下"><a href="#执行结果如下" class="headerlink" title="执行结果如下"></a>执行结果如下</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">157238 157238</span><br><span class="line">0</span><br><span class="line">157275 157275</span><br><span class="line">0</span><br><span class="line">157278 157278</span><br><span class="line">1</span><br><span class="line">157282 157281</span><br><span class="line">0</span><br><span class="line">157285 157285</span><br><span class="line">0</span><br><span class="line">157288 157288</span><br><span class="line">0</span><br><span class="line">157291 157291</span><br><span class="line">1</span><br><span class="line">157295 157294</span><br><span class="line">0</span><br><span class="line">157298 157298</span><br><span class="line">0</span><br><span class="line">157301 157301</span><br></pre></td></tr></table></figure>
+
+<p>基本可以确定在微秒级别</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>一般情况下，系统调用的时间成本是在 <code>ns</code>的级别，所以即使可以达到微秒级别，也要通过多次测量取平均值的办法才可以尽可能的实现准确。</p>
+<hr>
+<h1 id="测量系统调用的时间成本"><a href="#测量系统调用的时间成本" class="headerlink" title="测量系统调用的时间成本"></a>测量系统调用的时间成本</h1><p>这里使用简单的 <code>read()</code> 函数来测量调用的成本 ， 测试程序的代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n = <span class="number">10</span>;</span><br><span class="line">	<span class="keyword">while</span> (n--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> fd = open(<span class="string">&quot;./6.2.c&quot;</span>, O_RDONLY);</span><br><span class="line">		<span class="keyword">int</span> i;</span><br><span class="line">		<span class="keyword">char</span> buf[<span class="number">10</span>];</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">start</span>, <span class="title">end</span>;</span></span><br><span class="line">		<span class="keyword">if</span> (fd == <span class="number">-1</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;file open failed!\n&quot;</span>);</span><br><span class="line">			<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		gettimeofday(&amp;start, <span class="literal">NULL</span>);</span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			read(fd, buf, <span class="number">0</span>); <span class="comment">//为了让程序结束，把read的第二个参数改为0，这样就可以尽可能测量纯粹的系统调用耗时</span></span><br><span class="line">		&#125;</span><br><span class="line">		gettimeofday(&amp;end, <span class="literal">NULL</span>);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d :万次的平均结果： %lf\n&quot;</span>, <span class="number">10</span> - n, (<span class="number">1000000</span> * (end.tv_sec - start.tv_sec) + end.tv_usec - start.tv_usec) * <span class="number">1.0</span> / <span class="number">10000</span>); <span class="comment">//强制转换为double</span></span><br><span class="line">		close(fd);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试程序的结果如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1 :万次的平均结果： 0.583100</span><br><span class="line">2 :万次的平均结果： 0.598400</span><br><span class="line">3 :万次的平均结果： 0.594100</span><br><span class="line">4 :万次的平均结果： 0.595600</span><br><span class="line">5 :万次的平均结果： 0.601000</span><br><span class="line">6 :万次的平均结果： 0.615700</span><br><span class="line">7 :万次的平均结果： 0.606900</span><br><span class="line">8 :万次的平均结果： 0.589100</span><br><span class="line">9 :万次的平均结果： 0.595500</span><br><span class="line">10 :万次的平均结果： 0.584900</span><br></pre></td></tr></table></figure>
+
+<p>从多次运行万次平均结果看，对于 <code>read</code> 函数，系统调用的时间约为 0. 6 微秒。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/24/%E5%8D%95%E8%B0%83%E6%A0%88%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -931,108 +1020,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/17/C-%E9%AB%98%E7%B2%BE%E5%BA%A6%E7%AE%97%E6%B3%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow933">
-      <meta itemprop="description" content="均衡，存乎万物之间">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SnowDawn'Home">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/17/C-%E9%AB%98%E7%B2%BE%E5%BA%A6%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">C++高精度算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-17 09:56:24" itemprop="dateCreated datePublished" datetime="2021-08-17T09:56:24+08:00">2021-08-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-18 00:23:59" itemprop="dateModified" datetime="2021-08-18T00:23:59+08:00">2021-08-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">基础算法</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="大整数的存储方式"><a href="#大整数的存储方式" class="headerlink" title="大整数的存储方式"></a>大整数的存储方式</h1><p>大整数以数组的方式储存，把每一位都存进数组，把个位存进低位数组， 即倒着存。目的是方便进位，只需在数组后面再添加一个元素即可。</p>
-<hr>
-<h1 id="高精度加法"><a href="#高精度加法" class="headerlink" title="高精度加法"></a>高精度加法</h1><p>模拟加法运算的竖式，两个数组中的数分别相加 ，定义一个变量来模拟进位</p>
-<h4 id="加法模板"><a href="#加法模板" class="headerlink" title="加法模板"></a>加法模板</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">add</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;A, vector&lt;<span class="keyword">int</span>&gt; &amp;B)</span> <span class="comment">//&amp; 是加快了读入的速度</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">int</span> t = <span class="number">0</span>;								<span class="comment">// 模拟进位的变量</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.<span class="built_in">size</span>() || i &lt; B.<span class="built_in">size</span>(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; A.<span class="built_in">size</span>())					<span class="comment">//还有位数就加</span></span><br><span class="line">            t += A[i];</span><br><span class="line">        <span class="keyword">if</span> (i &lt; B.<span class="built_in">size</span>())</span><br><span class="line">            t += B[i];	</span><br><span class="line">        C.<span class="built_in">push_back</span>(t % <span class="number">10</span>);				<span class="comment">//进位的模拟</span></span><br><span class="line">		t /= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (t)									<span class="comment">//进到了最高位，加一位数</span></span><br><span class="line">        C.<span class="built_in">push_back</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    string a, b;</span><br><span class="line">    cin &gt;&gt; a &gt;&gt; b;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; A, B;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = a.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) <span class="comment">//把字符串填进动态数组</span></span><br><span class="line">        A.<span class="built_in">push_back</span>(a[i] - <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = b.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        B.<span class="built_in">push_back</span>(b[i] - <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    <span class="keyword">auto</span> C = <span class="built_in">add</span>(A, B);						<span class="comment">//auto 关键字，自动识别类型</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = C.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) <span class="comment">//反向输出</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, C[i]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="高精度减法"><a href="#高精度减法" class="headerlink" title="高精度减法"></a>高精度减法</h1><p>减法同样是遵循竖式运算的方式，相较于加法， 需要处理的点从进位变成了借位</p>
-<h3 id="需要注意的点"><a href="#需要注意的点" class="headerlink" title="需要注意的点"></a>需要注意的点</h3><ol>
-<li>借位的实现方法。</li>
-<li>保证是大数减去小数， 所以减之前要先判断两个数的大小</li>
-<li>减完之后注意处理前缀零 ， 比如 199 - 198 = 001 ， 最后的答案要把前面的零除掉。</li>
-</ol>
-<h4 id="减法模板"><a href="#减法模板" class="headerlink" title="减法模板"></a>减法模板</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;A, vector&lt;<span class="keyword">int</span>&gt; &amp;B)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (A.<span class="built_in">size</span>() != B.<span class="built_in">size</span>())				<span class="comment">//先比较位数，位数多的大</span></span><br><span class="line">        <span class="keyword">return</span> A.<span class="built_in">size</span>() &gt; B.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = A.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)	<span class="comment">//从大到小比较每一位</span></span><br><span class="line">        <span class="keyword">if</span> (A[i] != B[i])					<span class="comment">//数字不一样， 比较 大小，一样继续比较下一位</span></span><br><span class="line">            <span class="keyword">return</span> A[i] &gt; B[i];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;							<span class="comment">//全都一样，大小相等，0，不用加负号</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">sub</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;A, vector&lt;<span class="keyword">int</span>&gt; &amp;B)</span></span></span><br><span class="line"><span class="function"></span>&#123;		</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; C;							<span class="comment">//定义一个每个循环开始的时候值是0或1的t来表示借位</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, t = <span class="number">0</span>; i &lt; A.<span class="built_in">size</span>(); i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        t = A[i] + t;						<span class="comment">//是否被借位</span></span><br><span class="line">        <span class="keyword">if</span> (i &lt; B.<span class="built_in">size</span>())					<span class="comment">//还有可以减的位数</span></span><br><span class="line">            t -= B[i];</span><br><span class="line">        C.<span class="built_in">push_back</span>((t + <span class="number">10</span>) % <span class="number">10</span>);			<span class="comment">//(t + 10) % 10可以同时处理借位与不借位的情况</span></span><br><span class="line">        <span class="keyword">if</span> (t &lt; <span class="number">0</span>)							<span class="comment">//标记是否借位了</span></span><br><span class="line">            t = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            t = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (C.<span class="built_in">size</span>() &gt; <span class="number">1</span> &amp;&amp; C.<span class="built_in">back</span>() == <span class="number">0</span>)	<span class="comment">//如果不是只有一位 0 ，且前导有的时，去掉前导零</span></span><br><span class="line">        C.<span class="built_in">pop_back</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    string a, b;								<span class="comment">//输入大数与储存</span></span><br><span class="line">    cin &gt;&gt; a &gt;&gt; b;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; A, B;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = a.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        A.<span class="built_in">push_back</span>(a[i] - <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = b.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        B.<span class="built_in">push_back</span>(b[i] - <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">cmp</span>(A, B))								<span class="comment">//判断两个数的大小，决定用谁减谁</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">auto</span> C = <span class="built_in">sub</span>(A, B);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = C.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, C[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">auto</span> C = <span class="built_in">sub</span>(B, A);						<span class="comment">//小数减去大数，前面加上一个零</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;-&quot;</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = C.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, C[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="高精度乘法"><a href="#高精度乘法" class="headerlink" title="高精度乘法"></a>高精度乘法</h1><p>这里的高精度乘法指的是一个大数乘一个小数，并不是一个大数乘 一个大数。</p>
-<p>同样的模拟竖式的乘法。和加法是类似进位机制。</p>
-<h4 id="代码模板"><a href="#代码模板" class="headerlink" title="代码模板"></a>代码模板</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">mul</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    <span class="keyword">int</span> t = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.<span class="built_in">size</span>() || t; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; A.<span class="built_in">size</span>())					<span class="comment">//将每一个数直接乘上这个数即可</span></span><br><span class="line">            t += A[i] * b;</span><br><span class="line">        C.<span class="built_in">push_back</span>(t % <span class="number">10</span>);				<span class="comment">//进位机制同加法</span></span><br><span class="line">        t /= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (C.<span class="built_in">size</span>() &gt; <span class="number">1</span> &amp;&amp; C.<span class="built_in">back</span>() == <span class="number">0</span>)</span><br><span class="line">        C.<span class="built_in">pop_back</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    string a;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">    cin &gt;&gt; a &gt;&gt; b;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; A;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = a.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        A.<span class="built_in">push_back</span>(a[i] - <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    <span class="keyword">auto</span> C = <span class="built_in">mul</span>(A, b);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = C.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, C[i]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="高精度除法"><a href="#高精度除法" class="headerlink" title="高精度除法"></a>高精度除法</h1><p>同样是一个高精度的数除以一个低精度的数</p>
-<p>同样是模拟竖式计算除法的每一步</p>
-<h4 id="代码模板如下"><a href="#代码模板如下" class="headerlink" title="代码模板如下"></a>代码模板如下</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">div</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;A, <span class="keyword">int</span> b, <span class="keyword">int</span> &amp;r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; C;</span><br><span class="line">    r = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = A.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">    &#123;</span><br><span class="line">        r = r * <span class="number">10</span> + A[i];						<span class="comment">//每一次除完接下一位数，即余数 *10 ，加上下一位数</span></span><br><span class="line">        C.<span class="built_in">push_back</span>(r / b) ;					<span class="comment">//上商</span></span><br><span class="line">        r %= b;									<span class="comment">//得余数</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">reverse</span>( C.<span class="built_in">begin</span>() , C.<span class="built_in">end</span>());				<span class="comment">//因为C队列里的数是正向排进的，为了与一般储存习惯相同，将其反向一下。</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (C.<span class="built_in">size</span>() &gt; <span class="number">1</span> &amp;&amp; C.<span class="built_in">back</span>() == <span class="number">0</span>)		<span class="comment">//去掉前导零</span></span><br><span class="line">        C.<span class="built_in">pop_back</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    string a;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">    cin &gt;&gt; a &gt;&gt; b;</span><br><span class="line">    vector&lt;<span class="keyword">int</span>&gt; A;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = a.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        A.<span class="built_in">push_back</span>(a[i] - <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    <span class="keyword">int</span> r;									<span class="comment">//除法还要多一个余数</span></span><br><span class="line">    <span class="keyword">auto</span> C = <span class="built_in">div</span>(A, b, r);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = C.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, C[i]);</span><br><span class="line">    <span class="built_in">printf</span>( <span class="string">&quot;\n&quot;</span>) ; </span><br><span class="line">    <span class="built_in">printf</span>( <span class="string">&quot;%d&quot;</span> , r);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1102,14 +1089,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
@@ -1136,7 +1123,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
