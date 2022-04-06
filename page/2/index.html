@@ -182,6 +182,123 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/20/%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow933">
+      <meta itemprop="description" content="均衡，存乎万物之间">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SnowDawn'Home">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/20/%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86/" class="post-title-link" itemprop="url">前缀和与差分</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-20 14:50:31" itemprop="dateCreated datePublished" datetime="2021-08-20T14:50:31+08:00">2021-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-21 15:57:19" itemprop="dateModified" datetime="2021-08-21T15:57:19+08:00">2021-08-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">基础算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h1><p>前缀和数组<code>s[ ]</code>，即数列的前 n  项和，作用是快速求出数列中连续一段数字的总和，降低算法复杂度</p>
+<p>前缀和的求法很简单 ， 以下只放一小段代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">        s[i] = s[i - <span class="number">1</span>] + a[i];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>求其中一小段 l   到  r 中的所有数的和。</p>
+<p><code>s[r] - s[l - 1]</code></p>
+<h2 id="二维前缀和"><a href="#二维前缀和" class="headerlink" title="二维前缀和"></a>二维前缀和</h2><p>在一个二维的矩阵中同样可以使用前缀和来简便地计算某一个矩形的和</p>
+<p>前缀和数组 <code>s[i][j]</code>表达的意思是以点<code>(i , j)</code>为右下角坐标， 以零点为左下角坐标的矩形的和 ， 利用这个定义得出以下代码，是每一个坐标的二维前缀和数组</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s[i][j] = s[i - <span class="number">1</span>][j] + s[i][j - <span class="number">1</span>] - s[i - <span class="number">1</span>][j - <span class="number">1</span>] + a[i][j]</span><br></pre></td></tr></table></figure>
+
+<p>利用这个求出任意矩形的和 ( x1 , y1)  和  ( x2 ,  y2) 确定的矩形的和</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s[x2][y2] - s[x1 - <span class="number">1</span>][y2] - s[x2][y1 - <span class="number">1</span>] + s[x1 - <span class="number">1</span>][y1 - <span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+
+<p>附上一个求子矩阵的模板题及代码</p>
+<p>输入一个 n 行 m 列的整数矩阵，再输入 q 个询问，每个询问包含四个整数 x1,y1,x2,y2，表示一个子矩阵的左上角坐标和右下角坐标。对于每个询问输出子矩阵中所有数的和。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1010</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m, q;</span><br><span class="line"><span class="keyword">int</span> a[N][N], s[N][N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;n, &amp;m, &amp;q);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)    <span class="comment">//前缀和和差分一般都以1为下标和，方便统一方法</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i][j]);</span><br><span class="line">            s[i][j] = s[i - <span class="number">1</span>][j] + s[i][j - <span class="number">1</span>] - s[i - <span class="number">1</span>][j - <span class="number">1</span>] + a[i][j]; <span class="comment">//求前缀和数组</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (q--)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> x1, y1, x2, y2;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;x1, &amp;y1, &amp;x2, &amp;y2);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, s[x2][y2] - s[x1 - <span class="number">1</span>][y2] - s[x2][y1 - <span class="number">1</span>] + s[x1 - <span class="number">1</span>][y1 - <span class="number">1</span>]); <span class="comment">//利用前缀和求目标矩阵的和</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h1 id="差分"><a href="#差分" class="headerlink" title="差分"></a>差分</h1><p>差分和前缀和是一组逆运算。</p>
+<p>计算差分的前缀和就可以得到原数组 ， 计算原数组的前缀和就可以得到前缀和数组</p>
+<p>差分就是一个数组中相邻两个数的差值 ， 使用差分可以快速便捷地将数组的某一连续段的每一个全部加上一个相同的值，不需要遍历每一个数。</p>
+<p>使用一道例题来解释形式和用法</p>
+<p>输入一个长度为 n 的整数序列。</p>
+<p>接下来输入 m 个操作，每个操作包含三个整数 l,r,c       l,r,c，表示将序列中 [l,r][l,r] 之间的每个数加上 c。</p>
+<p>请你输出进行完所有操作后的序列。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1e5</span> + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[N], b[N]; <span class="comment">//定义数组和差分数组</span></span><br><span class="line"><span class="keyword">int</span> n, m;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span> <span class="params">( <span class="keyword">int</span> l , <span class="keyword">int</span> r , <span class="keyword">int</span> c)</span> <span class="comment">//插入操作，作用有二</span></span></span><br><span class="line"><span class="function"></span>&#123;									 <span class="comment">//一   初始化差分数组，相当于把每一个数插入全部为0的数组</span></span><br><span class="line">    b[l] += c ;						 <span class="comment">//二   插入，使某段 l r 之间的所有数都加上 c</span></span><br><span class="line">    b[r + <span class="number">1</span>] -= c ;					 <span class="comment">//原理： 将l处的差分加上一个数，使用差分的前缀和计算原数组的时候，l后的所有数都加上c</span></span><br><span class="line">&#125;									 <span class="comment">//		  将 r+1 处的差分减去 c 抵消了后续所有数加上的 c ， 保持不变</span></span><br><span class="line">									 <span class="comment">//       最终达到只在此段全部加 c 的目标</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);			<span class="comment">////初始化差分数组</span></span><br><span class="line">        <span class="built_in">insert</span>( i , i, a[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>( m --)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> l , r , c ;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span> , &amp;l , &amp;r , &amp;c);<span class="comment">//进行插入</span></span><br><span class="line">        <span class="built_in">insert</span>( l , r, c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n ; i++) <span class="comment">//对差分进行前缀和求原数组</span></span><br><span class="line">    &#123;</span><br><span class="line">        b[i] += b[i - <span class="number">1</span>];		</span><br><span class="line">        <span class="built_in">printf</span>( <span class="string">&quot;%d &quot;</span> , b[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二维差分（差分矩阵）"><a href="#二维差分（差分矩阵）" class="headerlink" title="二维差分（差分矩阵）"></a>二维差分（差分矩阵）</h2><p>改变二维差分的意义： 以此坐标为左上角 确定的矩阵中所有数 都 加 或 减去 c ，</p>
+<p>实现方法与二维前缀和相似，加加减减的。似乎有容斥原理的思想。</p>
+<p>代码模板：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N = <span class="number">1010</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m, q;</span><br><span class="line"><span class="keyword">int</span> a[N][N], b[N][N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> x1, <span class="keyword">int</span> y1, <span class="keyword">int</span> x2, <span class="keyword">int</span> y2, <span class="keyword">int</span> c)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    b[x1][y1] += c;								<span class="comment">//右下角全加</span></span><br><span class="line">    b[x1][y2 + <span class="number">1</span>] -= c;							<span class="comment">//减去两个长方形</span></span><br><span class="line">    b[x2 + <span class="number">1</span>][y1] -= c;</span><br><span class="line">    b[x2 + <span class="number">1</span>][y2 + <span class="number">1</span>] += c;						<span class="comment">//加上减去两次的一块区域</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;n, &amp;m, &amp;q);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i][j]);</span><br><span class="line">            <span class="built_in">insert</span>(i, j, i, j, a[i][j]);	<span class="comment">//初始化差分数组</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (q--)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> x1, x2, y1, y2, c;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d%d&quot;</span>, &amp;x1, &amp;y1, &amp;x2, &amp;y2, &amp;c); <span class="comment">//进行q次操作</span></span><br><span class="line">        <span class="built_in">insert</span>(x1, y1, x2, y2, c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            b[i][j] += b[i - <span class="number">1</span>][j] + b[i][j - <span class="number">1</span>] - b[i - <span class="number">1</span>][j - <span class="number">1</span>];<span class="comment">//使用差分的前缀和计算原数组</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, b[i][j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/08/17/C-%E9%AB%98%E7%B2%BE%E5%BA%A6%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -807,7 +924,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
