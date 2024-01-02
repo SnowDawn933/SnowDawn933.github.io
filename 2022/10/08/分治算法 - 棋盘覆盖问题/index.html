@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="分治算法 - 棋盘覆盖问题棋盘覆盖问题：有一个残缺的棋盘，由$2^k * 2^k$ 个方格组成，只能用以下四种残缺的方块组成（蓝色的部分表示残缺），成为三格板，两个三格板之间不能重叠，不能覆盖最终图形中的残缺方格。 ​               因为棋盘的组成满足 $2^k*2^k$ ,因此可以将这个问题根据分治的思想，将棋盘不断分为四块，那么每一块都是由$2^{k-1}*2^{k-1}$ 格子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SnowDawn&#39;Home">
+<meta property="og:url" content="http://example.com/2022/10/08/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%20-%20%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="SnowDawn&#39;Home">
+<meta property="og:description" content="分治算法 - 棋盘覆盖问题棋盘覆盖问题：有一个残缺的棋盘，由$2^k * 2^k$ 个方格组成，只能用以下四种残缺的方块组成（蓝色的部分表示残缺），成为三格板，两个三格板之间不能重叠，不能覆盖最终图形中的残缺方格。 ​               因为棋盘的组成满足 $2^k*2^k$ ,因此可以将这个问题根据分治的思想，将棋盘不断分为四块，那么每一块都是由$2^{k-1}*2^{k-1}$ 格子">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201122104354669.PNG#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020112210443867.PNG#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020112210450457.PNG#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201122104521697.PNG#pic_center">
+<meta property="og:image" content="c:/Users/lenovo/Desktop/7tp1lk4g.png">
+<meta property="article:published_time" content="2022-10-08T14:14:58.573Z">
+<meta property="article:modified_time" content="2022-10-11T10:27:52.738Z">
+<meta property="article:author" content="Snow933">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201122104354669.PNG#pic_center">
+
+<link rel="canonical" href="http://example.com/2022/10/08/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%20-%20%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title> | SnowDawn'Home</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SnowDawn'Home</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/08/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%20-%20%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow933">
+      <meta itemprop="description" content="均衡，存乎万物之间">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SnowDawn'Home">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-08 22:14:58" itemprop="dateCreated datePublished" datetime="2022-10-08T22:14:58+08:00">2022-10-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-11 18:27:52" itemprop="dateModified" datetime="2022-10-11T18:27:52+08:00">2022-10-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="分治算法-棋盘覆盖问题"><a href="#分治算法-棋盘覆盖问题" class="headerlink" title="分治算法 - 棋盘覆盖问题"></a>分治算法 - 棋盘覆盖问题</h1><p>棋盘覆盖问题：有一个残缺的棋盘，由$2^k * 2^k$ 个方格组成，只能用以下四种残缺的方块组成（蓝色的部分表示残缺），成为三格板，两个三格板之间不能重叠，不能覆盖最终图形中的残缺方格。</p>
+<p>​              <img src="https://img-blog.csdnimg.cn/20201122104354669.PNG#pic_center" alt="1号"><img src="https://img-blog.csdnimg.cn/2020112210443867.PNG#pic_center" alt="2号"><img src="https://img-blog.csdnimg.cn/2020112210450457.PNG#pic_center" alt="3号"><img src="https://img-blog.csdnimg.cn/20201122104521697.PNG#pic_center" alt="4号"></p>
+<p>因为棋盘的组成满足 $2^k*2^k$ ,因此可以将这个问题根据分治的思想，将棋盘不断分为四块，那么每一块都是由$2^{k-1}*2^{k-1}$ 格子组成的，将一个大的棋盘不断分为四份的小棋盘。</p>
+<p>为了保证满足覆盖要求和条件，将其中三块的缺口放在中间，这样就可以把缺口覆盖，只留下题目中要求的唯一缺口。</p>
+<p>首先考虑k=1的情况，若把某一格放空，方案是唯一的。已知某个正方形和空格，我们按照上下面的办法，可输出方案。首先延中心，将边长为$2^k*2^k$的矩形分成4个边长为$2^{k-1}*2^{k−1}$的矩形。那么空出来的格子，一定位于其中的一个，而另外的三个就可以让它们位于原矩阵中心的那个角空出来<img src="C:\Users\lenovo\Desktop\7tp1lk4g.png" alt="7tp1lk4g"></p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Description: 算法分析与设计</span></span><br><span class="line"><span class="comment"> * @Autor: 赵晗</span></span><br><span class="line"><span class="comment"> * @Date: 2022-10-08 21:45:09</span></span><br><span class="line"><span class="comment"> * @LastEditors: 赵晗</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-10-09 22:05:51</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> boardsize = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> Board[<span class="number">8</span>][<span class="number">8</span>];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Cover</span><span class="params">(<span class="keyword">int</span> tr, <span class="keyword">int</span> tc, <span class="keyword">int</span> dr, <span class="keyword">int</span> dc, <span class="keyword">int</span> size)</span></span>; <span class="comment">//填充棋盘的函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">OutputBoard</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x, y;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="comment">//输入棋盘规模</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请确认棋盘规模，输入k大小（2k×2k）:&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; k;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= k; i++)</span><br><span class="line">        boardsize *= <span class="number">2</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请输入残缺棋子位置（行号，列号）:&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; x &gt;&gt; y;</span><br><span class="line">    <span class="built_in">Cover</span>(<span class="number">0</span>, <span class="number">0</span>, x, y, boardsize);</span><br><span class="line">    <span class="built_in">OutputBoard</span>(boardsize);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Cover</span><span class="params">(<span class="keyword">int</span> tr, <span class="keyword">int</span> tc, <span class="keyword">int</span> dr, <span class="keyword">int</span> dc, <span class="keyword">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (size &lt; <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">int</span> t = count++;</span><br><span class="line">    <span class="keyword">int</span> s = size / <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//如果残缺在左上角</span></span><br><span class="line">    <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &lt; tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//右上角</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &gt;= tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &lt; tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &gt;= tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">OutputBoard</span><span class="params">(<span class="keyword">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="comment">//输出棋盘的内容</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; size; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout.<span class="built_in">width</span>(<span class="number">5</span>);</span><br><span class="line">            cout &lt;&lt; Board[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="分治算法的复杂度分析"><a href="#分治算法的复杂度分析" class="headerlink" title="分治算法的复杂度分析"></a>分治算法的复杂度分析</h3><p>分治算法将一个规模为$n$ 的问题分解为k个规模为$\frac{n}{m}$的问题，整个问题的复杂度计算分为三个部分</p>
+<ul>
+<li><p>将问题分解的时间$f(n)$</p>
+</li>
+<li><p>k个小规模问题的时间之和$kT(\frac{n}{m})$</p>
+</li>
+<li><p>将结果合并的时间$f(n)$</p>
+<p>所以在问题规模$n\neq1$ 的前提下,分治算法的时间复杂度计算公式为<br>$$<br>T(n) =kT(\frac{n}{m})+f(n)<br>$$</p>
+<p>其中，m为将问题分解为了多少个子问题，k是这些子问题中有多少是需要进行计算和解决的，在棋盘覆盖问题中，将问题分为了4份，全部都要解决，所以<br>$$<br> k = m = 4<br>$$</p>
+<p>很简单的可以得到，将这些子问题的结果合并的时间复杂度是$O(1)$</p>
+<p>接下里由master定理可以计算得到<br>$$<br>T(n) = O(n)<br>$$<br>时间复杂度求解完成。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/26/%E7%AE%97%E6%B3%95%E7%9A%84%E7%89%B9%E6%80%A7/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/03/02/%E9%83%A8%E7%BD%B2%E6%B5%8B%E8%AF%95/" rel="next" title="部署测试">
+      部署测试 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95-%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">分治算法 - 棋盘覆盖问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%E7%9A%84%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-number">1.0.1.</span> <span class="nav-text">分治算法的复杂度分析</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Snow933</p>
+  <div class="site-description" itemprop="description">均衡，存乎万物之间</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Snow933</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
