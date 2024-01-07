@@ -182,6 +182,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/08/26/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%20-%20%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Snow933">
+      <meta itemprop="description" content="均衡，存乎万物之间">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SnowDawn'Home">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/08/26/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%20-%20%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">分支算法-棋盘覆盖问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-08-26 15:47:14" itemprop="dateCreated datePublished" datetime="2023-08-26T15:47:14+08:00">2023-08-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-01-07 20:37:51" itemprop="dateModified" datetime="2024-01-07T20:37:51+08:00">2024-01-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">基础算法</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="分治算法-棋盘覆盖问题"><a href="#分治算法-棋盘覆盖问题" class="headerlink" title="分治算法 - 棋盘覆盖问题"></a>分治算法 - 棋盘覆盖问题</h1><p>棋盘覆盖问题：有一个残缺的棋盘，由$2^k * 2^k$ 个方格组成，只能用以下四种残缺的方块组成（蓝色的部分表示残缺），成为三格板，两个三格板之间不能重叠，不能覆盖最终图形中的残缺方格。</p>
+<p>​              <img src="./../pic/4-1.PNG" alt="1号"><img src="./../pic/4-2.PNG" alt="2号"><img src="./../pic/4-3.png" alt="3号"><img src="./../pic/4-4.png" alt="4号"></p>
+<p>因为棋盘的组成满足 $2^k*2^k$ ,因此可以将这个问题根据分治的思想，将棋盘不断分为四块，那么每一块都是由$2^{k-1}*2^{k-1}$ 格子组成的，将一个大的棋盘不断分为四份的小棋盘。</p>
+<p>为了保证满足覆盖要求和条件，将其中三块的缺口放在中间，这样就可以把缺口覆盖，只留下题目中要求的唯一缺口。</p>
+<p>首先考虑k=1的情况，若把某一格放空，方案是唯一的。已知某个正方形和空格，我们按照上下面的办法，可输出方案。首先延中心，将边长为$2^k*2^k$的矩形分成4个边长为$2^{k-1}*2^{k−1}$的矩形。那么空出来的格子，一定位于其中的一个，而另外的三个就可以让它们位于原矩阵中心的那个角空出来</p>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Description: 算法分析与设计</span></span><br><span class="line"><span class="comment"> * @Autor: 赵晗</span></span><br><span class="line"><span class="comment"> * @Date: 2022-10-08 21:45:09</span></span><br><span class="line"><span class="comment"> * @LastEditors: 赵晗</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-10-09 22:05:51</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> boardsize = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> Board[<span class="number">8</span>][<span class="number">8</span>];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Cover</span><span class="params">(<span class="keyword">int</span> tr, <span class="keyword">int</span> tc, <span class="keyword">int</span> dr, <span class="keyword">int</span> dc, <span class="keyword">int</span> size)</span></span>; <span class="comment">//填充棋盘的函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">OutputBoard</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x, y;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="comment">//输入棋盘规模</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请确认棋盘规模，输入k大小（2k×2k）:&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; k;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= k; i++)</span><br><span class="line">        boardsize *= <span class="number">2</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请输入残缺棋子位置（行号，列号）:&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; x &gt;&gt; y;</span><br><span class="line">    <span class="built_in">Cover</span>(<span class="number">0</span>, <span class="number">0</span>, x, y, boardsize);</span><br><span class="line">    <span class="built_in">OutputBoard</span>(boardsize);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Cover</span><span class="params">(<span class="keyword">int</span> tr, <span class="keyword">int</span> tc, <span class="keyword">int</span> dr, <span class="keyword">int</span> dc, <span class="keyword">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (size &lt; <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">int</span> t = count++;</span><br><span class="line">    <span class="keyword">int</span> s = size / <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//如果残缺在左上角</span></span><br><span class="line">    <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &lt; tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//右上角</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &gt;= tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &lt; tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &gt;= tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">OutputBoard</span><span class="params">(<span class="keyword">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="comment">//输出棋盘的内容</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; size; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout.<span class="built_in">width</span>(<span class="number">5</span>);</span><br><span class="line">            cout &lt;&lt; Board[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="分治算法的复杂度分析"><a href="#分治算法的复杂度分析" class="headerlink" title="分治算法的复杂度分析"></a>分治算法的复杂度分析</h3><p>分治算法将一个规模为$n$ 的问题分解为k个规模为$\frac{n}{m}$的问题，整个问题的复杂度计算分为三个部分</p>
+<ul>
+<li><p>将问题分解的时间$f(n)$</p>
+</li>
+<li><p>k个小规模问题的时间之和$kT(\frac{n}{m})$</p>
+</li>
+<li><p>将结果合并的时间$f(n)$</p>
+<p>所以在问题规模$n\neq1$ 的前提下,分治算法的时间复杂度计算公式为<br>$$<br>T(n) =kT(\frac{n}{m})+f(n)<br>$$</p>
+<p>其中，m为将问题分解为了多少个子问题，k是这些子问题中有多少是需要进行计算和解决的，在棋盘覆盖问题中，将问题分为了4份，全部都要解决，所以<br>$$<br>k = m = 4<br>$$</p>
+<p>很简单的可以得到，将这些子问题的结果合并的时间复杂度是$O(1)$</p>
+<p>接下里由master定理可以计算得到<br>$$<br>T(n) = O(n)<br>$$<br>时间复杂度求解完成。</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/02/%E9%83%A8%E7%BD%B2%E6%B5%8B%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -237,94 +333,6 @@
 
       
           <p>时间部署测试</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/08/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%20-%20%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Snow933">
-      <meta itemprop="description" content="均衡，存乎万物之间">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SnowDawn'Home">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/10/08/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95%20-%20%E6%A3%8B%E7%9B%98%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">未命名</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-10-08 22:14:58" itemprop="dateCreated datePublished" datetime="2022-10-08T22:14:58+08:00">2022-10-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-07 20:21:34" itemprop="dateModified" datetime="2024-01-07T20:21:34+08:00">2024-01-07</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>title: 分支算法-棋盘覆盖问题<br>date: 2022-08-26 15:47:14<br>categories: 基础算法</p>
-<h1 id="分治算法-棋盘覆盖问题"><a href="#分治算法-棋盘覆盖问题" class="headerlink" title="分治算法 - 棋盘覆盖问题"></a>分治算法 - 棋盘覆盖问题</h1><p>棋盘覆盖问题：有一个残缺的棋盘，由$2^k * 2^k$ 个方格组成，只能用以下四种残缺的方块组成（蓝色的部分表示残缺），成为三格板，两个三格板之间不能重叠，不能覆盖最终图形中的残缺方格。</p>
-<p>​              <img src="./../pic/4-1.PNG" alt="1号"><img src="./../pic/4-2.PNG" alt="2号"><img src="./../pic/4-3.png" alt="3号"><img src="./../pic/4-4.png" alt="4号"></p>
-<p>因为棋盘的组成满足 $2^k*2^k$ ,因此可以将这个问题根据分治的思想，将棋盘不断分为四块，那么每一块都是由$2^{k-1}*2^{k-1}$ 格子组成的，将一个大的棋盘不断分为四份的小棋盘。</p>
-<p>为了保证满足覆盖要求和条件，将其中三块的缺口放在中间，这样就可以把缺口覆盖，只留下题目中要求的唯一缺口。</p>
-<p>首先考虑k=1的情况，若把某一格放空，方案是唯一的。已知某个正方形和空格，我们按照上下面的办法，可输出方案。首先延中心，将边长为$2^k*2^k$的矩形分成4个边长为$2^{k-1}*2^{k−1}$的矩形。那么空出来的格子，一定位于其中的一个，而另外的三个就可以让它们位于原矩阵中心的那个角空出来</p>
-<p>代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Description: 算法分析与设计</span></span><br><span class="line"><span class="comment"> * @Autor: 赵晗</span></span><br><span class="line"><span class="comment"> * @Date: 2022-10-08 21:45:09</span></span><br><span class="line"><span class="comment"> * @LastEditors: 赵晗</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-10-09 22:05:51</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> boardsize = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> Board[<span class="number">8</span>][<span class="number">8</span>];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Cover</span><span class="params">(<span class="keyword">int</span> tr, <span class="keyword">int</span> tc, <span class="keyword">int</span> dr, <span class="keyword">int</span> dc, <span class="keyword">int</span> size)</span></span>; <span class="comment">//填充棋盘的函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">OutputBoard</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x, y;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="comment">//输入棋盘规模</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请确认棋盘规模，输入k大小（2k×2k）:&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; k;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= k; i++)</span><br><span class="line">        boardsize *= <span class="number">2</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;请输入残缺棋子位置（行号，列号）:&quot;</span> &lt;&lt; endl;</span><br><span class="line">    cin &gt;&gt; x &gt;&gt; y;</span><br><span class="line">    <span class="built_in">Cover</span>(<span class="number">0</span>, <span class="number">0</span>, x, y, boardsize);</span><br><span class="line">    <span class="built_in">OutputBoard</span>(boardsize);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Cover</span><span class="params">(<span class="keyword">int</span> tr, <span class="keyword">int</span> tc, <span class="keyword">int</span> dr, <span class="keyword">int</span> dc, <span class="keyword">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (size &lt; <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">int</span> t = count++;</span><br><span class="line">    <span class="keyword">int</span> s = size / <span class="number">2</span>;</span><br><span class="line">    <span class="comment">//如果残缺在左上角</span></span><br><span class="line">    <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &lt; tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//右上角</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &lt; tr + s &amp;&amp; dc &gt;= tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &lt; tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, tr + s, tc + s, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (dr &gt;= tr + s &amp;&amp; dc &gt;= tc + s)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc + s, dr, dc, s);</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        Board[tr + s - <span class="number">1</span>][tc + s] = t;</span><br><span class="line">        Board[tr + s][tc + s - <span class="number">1</span>] = t;</span><br><span class="line">        <span class="comment">//返回，填充其他部分</span></span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc, tr + s - <span class="number">1</span>, tc + s - <span class="number">1</span>, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr, tc + s, tr + s - <span class="number">1</span>, tc + s, s);</span><br><span class="line">        <span class="built_in">Cover</span>(tr + s, tc, tr + s, tc + s - <span class="number">1</span>, s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">OutputBoard</span><span class="params">(<span class="keyword">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="comment">//输出棋盘的内容</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; size; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            cout.<span class="built_in">width</span>(<span class="number">5</span>);</span><br><span class="line">            cout &lt;&lt; Board[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="分治算法的复杂度分析"><a href="#分治算法的复杂度分析" class="headerlink" title="分治算法的复杂度分析"></a>分治算法的复杂度分析</h3><p>分治算法将一个规模为$n$ 的问题分解为k个规模为$\frac{n}{m}$的问题，整个问题的复杂度计算分为三个部分</p>
-<ul>
-<li><p>将问题分解的时间$f(n)$</p>
-</li>
-<li><p>k个小规模问题的时间之和$kT(\frac{n}{m})$</p>
-</li>
-<li><p>将结果合并的时间$f(n)$</p>
-<p>所以在问题规模$n\neq1$ 的前提下,分治算法的时间复杂度计算公式为<br>$$<br>T(n) =kT(\frac{n}{m})+f(n)<br>$$</p>
-<p>其中，m为将问题分解为了多少个子问题，k是这些子问题中有多少是需要进行计算和解决的，在棋盘覆盖问题中，将问题分为了4份，全部都要解决，所以<br>$$<br>k = m = 4<br>$$</p>
-<p>很简单的可以得到，将这些子问题的结果合并的时间复杂度是$O(1)$</p>
-<p>接下里由master定理可以计算得到<br>$$<br>T(n) = O(n)<br>$$<br>时间复杂度求解完成。</p>
-</li>
-</ul>
 
       
     </div>
