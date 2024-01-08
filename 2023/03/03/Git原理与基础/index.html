@@ -27,18 +27,18 @@
 <meta property="og:site_name" content="SnowDawn&#39;Home">
 <meta property="og:description" content="Git原理和基础在过去几个学期的期末大作业合作中，我们常常花费了大量的时间和精力去将各人的工作整合在一起成为一个完整的项目。通常我们分配完成任务，完成各自的编码任务，最后再汇总在一个人那里，完成最后的调试。 在这样的前提下，我开始系统地学习和了解版本管理工具，其中Git是使用最广泛的。 Git工作原理Git 将顶级目录中的文件和文件夹作为集合，并通过一系列快照来管理其历史记录。在Git的术语里，文">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108104233560.png">
-<meta property="og:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108110306552.png">
-<meta property="og:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108110746951.png">
-<meta property="og:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108113553832.png">
-<meta property="og:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108113758913.png">
-<meta property="og:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108114129515.png">
-<meta property="og:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108114915744.png">
+<meta property="og:image" content="http://example.com/2023/03/03/pic/image-20240108104233560.png">
+<meta property="og:image" content="http://example.com/2023/03/03/pic/image-20240108110306552.png">
+<meta property="og:image" content="http://example.com/2023/03/03/pic/image-20240108110746951.png">
+<meta property="og:image" content="http://example.com/2023/03/03/pic/image-20240108113553832.png">
+<meta property="og:image" content="http://example.com/2023/03/03/pic/image-20240108113758913.png">
+<meta property="og:image" content="http://example.com/2023/03/03/pic/image-20240108114129515.png">
+<meta property="og:image" content="http://example.com/2023/03/03/pic/image-20240108114915744.png">
 <meta property="article:published_time" content="2023-03-03T03:44:04.000Z">
-<meta property="article:modified_time" content="2024-01-08T03:55:16.817Z">
+<meta property="article:modified_time" content="2024-01-08T04:02:41.983Z">
 <meta property="article:author" content="Snow933">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/img/image-20240108104233560.png">
+<meta name="twitter:image" content="http://example.com/2023/03/03/pic/image-20240108104233560.png">
 
 <link rel="canonical" href="http://example.com/2023/03/03/Git%E5%8E%9F%E7%90%86%E4%B8%8E%E5%9F%BA%E7%A1%80/">
 
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-01-08 11:55:16" itemprop="dateModified" datetime="2024-01-08T11:55:16+08:00">2024-01-08</time>
+                <time title="修改时间：2024-01-08 12:02:41" itemprop="dateModified" datetime="2024-01-08T12:02:41+08:00">2024-01-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,14 +249,14 @@
         <h1 id="Git原理和基础"><a href="#Git原理和基础" class="headerlink" title="Git原理和基础"></a>Git原理和基础</h1><p>在过去几个学期的期末大作业合作中，我们常常花费了大量的时间和精力去将各人的工作整合在一起成为一个完整的项目。通常我们分配完成任务，完成各自的编码任务，最后再汇总在一个人那里，完成最后的调试。</p>
 <p>在这样的前提下，我开始系统地学习和了解版本管理工具，其中Git是使用最广泛的。</p>
 <h3 id="Git工作原理"><a href="#Git工作原理" class="headerlink" title="Git工作原理"></a>Git工作原理</h3><p>Git 将顶级目录中的文件和文件夹作为集合，并通过一系列快照来管理其历史记录。在Git的术语里，文件被称作Blob对象（数据对象），也就是一组数据。目录则被称之为“树”，它将名字与 Blob 对象或树对象进行映射（使得目录中可以包含其他目录）。快照则是被追踪的最顶层的树。一个最简单的文件结构树例子：</p>
-<p><img src="./img/image-20240108104233560.png" alt="image-20240108104233560"></p>
+<p><img src="./../pic/image-20240108104233560.png" alt="image-20240108104233560"></p>
 <p>这个顶层的树包含了两个元素，一个名为 “foo” 的树（它本身包含了一个blob对象 “bar.txt”），以及一个 blob 对象 “baz.txt”</p>
 <hr>
 <p>Git的历史记录是一个由快照的有向无环图，图中的每一个节点都是一个快照，每个快照都包括一个文件结构状态。所以每一个快照都有一系列父辈，也就是其之前的一系列快照。</p>
 <p>在 Git 中，这些快照被称为“提交”。通过可视化的方式来表示这些历史提交记录时，看起来差不多是这样的：</p>
-<p><img src="./img/image-20240108110306552.png" alt="image-20240108110306552"></p>
+<p><img src="./../pic/image-20240108110306552.png" alt="image-20240108110306552"></p>
 <p>图中的每个o表示一次commit，即快照。箭头指向了当前提交的父辈在第三次提交之后，历史记录分岔成了两条独立的分支。这可能因为此时需要同时开发两个不同的特性，它们之间是相互独立的。开发完成后，这些分支可能会被合并并创建一个新的提交，这个新的提交会同时包含这些特性。新的提交会创建一个新的历史记录，看上去像这样（最新的合并提交用粗体标记）：</p>
-<p><img src="./img/image-20240108110746951.png" alt="image-20240108110746951"></p>
+<p><img src="./../pic/image-20240108110746951.png" alt="image-20240108110746951"></p>
 <p>Git 中的提交是不可改变的。但这并不代表错误不能被修改，只不过这种“修改”实际上是创建了一个全新的提交记录。</p>
 <hr>
 <h3 id="数据模型和伪代码表示"><a href="#数据模型和伪代码表示" class="headerlink" title="数据模型和伪代码表示"></a>数据模型和伪代码表示</h3><p>使用伪代码表示Git的数据模型：</p>
@@ -273,19 +273,19 @@
 <p>显示当前仓库状态，下面的状态是没有提交到暂存区的结果</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
 
-<p><img src="./img/image-20240108113553832.png" alt="image-20240108113553832"></p>
+<p><img src="./../pic/image-20240108113553832.png" alt="image-20240108113553832"></p>
 <p>添加文件到暂存区,将修改后的文件添加到暂存区，后查看status，显示出等待commit的记录。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add</span><br></pre></td></tr></table></figure>
 
-<p><img src="./img/image-20240108113758913.png" alt="image-20240108113758913"></p>
+<p><img src="./../pic/image-20240108113758913.png" alt="image-20240108113758913"></p>
 <p>提交记录,输入后会提示用户添加提交信息记录，成功后显示出简化版本的hash值</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit</span><br></pre></td></tr></table></figure>
 
-<p><img src="./img/image-20240108114129515.png" alt="image-20240108114129515"></p>
+<p><img src="./../pic/image-20240108114129515.png" alt="image-20240108114129515"></p>
 <p>查看日志，显示出当前的位置和已经存在的分支，加上参数后会以图的形式表示，更加直观</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log --all --graph --decorete</span><br></pre></td></tr></table></figure>
 
-<p><img src="./img/image-20240108114915744.png" alt="image-20240108114915744"></p>
+<p><img src="./../pic/image-20240108114915744.png" alt="image-20240108114915744"></p>
 <hr>
 <p>有关Git的多人协作功能还需要进一步学习，在此贴就不进行形象记录，主要体现Git的底层逻辑。</p>
 <h2 id="后续学习资料"><a href="#后续学习资料" class="headerlink" title="后续学习资料"></a>后续学习资料</h2><ul>
